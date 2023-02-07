@@ -24,13 +24,17 @@ Knowledge has a few more access control configurations, such as view knowledge a
 
 a. Clear the Search_Variable in case the customer has already been through this flow before.
 In our “Search FAQ” dialog, we always want to clear the variable first so that the customer can search with a new keyword each time:
-![image](https://user-images.githubusercontent.com/37139091/217370739-89391509-6bed-4630-a402-d3bbdbca4201.png)
+
+![image](https://user-images.githubusercontent.com/37139091/217377231-948e576d-3115-43d5-ae1d-e1c7f263cfc3.png)
 
 b. Ask the customer what they want to know:
+
 ![image](https://user-images.githubusercontent.com/37139091/217371186-c9b9c8aa-2145-433e-9d39-dd28d4a2cdeb.png)
 
 c. Call our Apex class: 
+
 ![image](https://user-images.githubusercontent.com/37139091/217371571-a83608c7-61be-4f45-a47d-377cecdb568b.png)
+
 ![image](https://user-images.githubusercontent.com/37139091/217371725-18cd04e7-a15e-4abc-83d3-440924e44ca1.png)
 
 
