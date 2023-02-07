@@ -37,6 +37,11 @@ c. Call our Apex class:
 
 ![image](https://user-images.githubusercontent.com/37139091/217371725-18cd04e7-a15e-4abc-83d3-440924e44ca1.png)
 
+d. Merge our Apex output back into a response:
+
+![image](https://user-images.githubusercontent.com/37139091/217377616-c8e78be6-6def-4cfd-b47b-b8caa4cbf594.png)
+
+
 
 
 
