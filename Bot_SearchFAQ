@@ -1,0 +1,76 @@
+/** The SearchFAQ() method first executes a SOSL search.
+ * The method then loops through the search results. For each article, it calls the summarizeArticleForBot() method,
+ *  and concatenates the summaries. The results are returned in one long text variable.
+* @author Fernanda Sancho
+* @date 02/08/2022
+* Last update 03/02/23 - Added visible in bot button in SOSL query
+*/
+
+
+public with sharing class CookbookBot_SearchFAQ {
+     public static List<Search.SearchResult> articlelist=new List<Search.SearchResult>();
+
+   /** Inputs */
+   public class FAQSearchInput{
+       @InvocableVariable(required=true)
+       public String sKeyword;
+   }
+
+   /** Outputs */
+   public class FAQSearchOutput{
+       @InvocableVariable(required=true)
+       public String sFAQSearchResult;
+   }
+
+   /** Invocable Method */
+   @InvocableMethod(label='Search FAQ')
+   public static List<FAQSearchOutput> searchFAQ(List<FAQSearchInput> faqSearchInput)
+   {
+       String sKeyword = faqSearchInput[0].sKeyword;
+       //added debug log line 30 for testing
+       System.debug('sKeyword '+sKeyword);
+
+       // Build the SOSL query and filter brand to be equal to Whale, Group and blank 
+       String sQuery = 'FIND \'' + sKeyword + 
+         '\' IN ALL FIELDS RETURNING Knowledge__kav (Id, Title, Chat_Answer__c WHERE  Language = \'en_US\' AND Article_Brand__c IN (\'Whale\', \'GROUP\', \'\') AND IsVisibleInPkb = true AND IsVisibleInCsp = true AND IsVisibleInBot__c = true) WITH SNIPPET (target_length=255) LIMIT 2';
+
+       // Perform the SOSL search
+       Search.SearchResults searchResults = Search.find(sQuery);
+
+       // Use search results to get the list of articles
+       List<Search.SearchResult> articlelist = searchResults.get('Knowledge__kav');
+
+       String sFAQSearchResult = '';
+
+       // Loop through all the articles to get article info
+       for (Search.SearchResult searchResult : articlelist)
+       {
+           Knowledge__kav article = (Knowledge__kav) searchResult.getSObject();
+           String sArticleSummary = summarizeArticleForBot(article);
+           sFAQSearchResult = sFAQSearchResult + sArticleSummary;
+       }
+
+       if (sFAQSearchResult == '') sFAQSearchResult = 'Sorry, I could not find anything in the knowledge base that would be a good match.';
+
+       // Build the output structure containing the results
+       List<FAQSearchOutput> faqSearchOutputs = new List<FAQSearchOutput>();
+       FAQSearchOutput faqSearchOutput = new FAQSearchOutput();
+       faqSearchOutput.sFAQSearchResult = sFAQSearchResult;
+       faqSearchOutputs.add(faqSearchOutput);
+       system.debug(faqSearchOutput);
+       return faqSearchOutputs;   
+   }     
+
+   /** Helper method that summarizes the article */
+   public static String summarizeArticleForBot(Knowledge__kav article)
+   {
+       String sSummary;
+       
+       sSummary = 'Article: ' + article.Title + '\n'+
+                  'Answer: ' + article.Chat_Answer__c + '\n\n';
+
+       return sSummary;
+   }
+
+   
+}
