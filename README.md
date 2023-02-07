@@ -16,4 +16,4 @@ Given the limited real estate in a chat window, a typical user interface shows o
 - The SearchFAQ() method first executes a SOSL search with filters on PublishStatus, Language and IsVisibleInPkb. If you use data categories to filter article visibility in the community, include the WITH DATA CATEGORY clause as well. The goal is that only public articles are included in the search result. The method then loops through the search results. For each article, it calls the summarizeArticleForBot() method and concatenates the summaries. The results are returned in one long text variable.
 
 - The goal for the summarizeArticleForBot() method is to create the article title and a link to open the article.
-- 
+- Install LWC pack to have the hyperlink feature: <a href="https://appexchange.salesforce.com/listingDetail?listingId=a0N3A00000FoirpUAB&tab=e">Visit App Exchange</a>
