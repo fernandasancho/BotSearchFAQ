@@ -2,8 +2,6 @@
  * The method then loops through the search results. For each article, it calls the summarizeArticleForBot() method,
  *  and concatenates the summaries. The results are returned in one long text variable.
 * @author Fernanda Sancho
-* @date 02/08/2022
-* Last update 03/02/23 - Added visible in bot button in SOSL query
 */
 
 
@@ -32,7 +30,7 @@ public with sharing class CookbookBot_SearchFAQ {
 
        // Build the SOSL query and filter brand to be equal to Whale, Group and blank 
        String sQuery = 'FIND \'' + sKeyword + 
-         '\' IN ALL FIELDS RETURNING Knowledge__kav (Id, Title, Chat_Answer__c WHERE  Language = \'en_US\' AND Article_Brand__c IN (\'Whale\', \'GROUP\', \'\') AND IsVisibleInPkb = true AND IsVisibleInCsp = true AND IsVisibleInBot__c = true) WITH SNIPPET (target_length=255) LIMIT 2';
+         '\' IN ALL FIELDS RETURNING Knowledge__kav (Id, Title, Chat_Answer__c WHERE  Language = \'en_US\' AND Article_Brand__c IN (\'Whale\', \'GROUP\', \'\') AND IsVisibleInPkb = true AND IsVisibleInCsp = true) WITH SNIPPET (target_length=255) LIMIT 2';
 
        // Perform the SOSL search
        Search.SearchResults searchResults = Search.find(sQuery);
