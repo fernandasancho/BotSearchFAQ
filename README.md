@@ -1,4 +1,4 @@
-# Eintein_Bot_SearchFAQ POC
+# Bot_SearchFAQ POC
 <h1>Search Your Knowledge Base</h1>
 
 In this recipe, we learn how to search our Knowledge base and return those results to the customer.
