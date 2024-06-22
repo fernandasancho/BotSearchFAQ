@@ -1,0 +1,55 @@
+@isTest
+public class CookbookBot_SearchFAQTest {
+
+    // Test method to cover the searchFAQ method
+    @isTest
+    static void testSearchFAQ() {
+        // Step 1: Prepare test data
+        // Create a mock Knowledge__kav article
+        Knowledge__kav article = new Knowledge__kav();
+        article.Title = 'Test Article';
+        article.Chat_Answer__c = 'This is a test answer.';
+        // Add any other required fields as per your actual Knowledge__kav object
+        insert article;
+
+        // Prepare SOSL search result
+        List<Search.SearchResult> searchResults = new List<Search.SearchResult>();
+        Search.SearchResult searchResult = new Search.SearchResult(article);
+        searchResults.add(searchResult);
+
+        // Mock the Search.find method to return search results
+        Test.setMock(Search.class, new CookbookBot_SearchFAQTest.MockSearch(searchResults));
+
+        // Step 2: Prepare input for the searchFAQ method
+        List<CookbookBot_SearchFAQ.FAQSearchInput> inputs = new List<CookbookBot_SearchFAQ.FAQSearchInput>();
+        CookbookBot_SearchFAQ.FAQSearchInput input = new CookbookBot_SearchFAQ.FAQSearchInput();
+        input.sKeyword = 'test'; // Provide a keyword that matches your test data
+        inputs.add(input);
+
+        // Step 3: Call the searchFAQ method
+        Test.startTest();
+        List<CookbookBot_SearchFAQ.FAQSearchOutput> results = CookbookBot_SearchFAQ.searchFAQ(inputs);
+        Test.stopTest();
+
+        // Step 4: Assert the results
+        System.assertEquals(1, results.size(), 'Expected one FAQSearchOutput result');
+        System.assertNotEquals('Sorry, I could not find anything in the knowledge base that would be a good match.', results[0].sFAQSearchResult, 'Expected a valid search result');
+    }
+
+    // Mock class for Search class to return mock search results
+    public class MockSearch implements HttpCalloutMock {
+        List<Search.SearchResult> searchResults;
+
+        public MockSearch(List<Search.SearchResult> searchResults) {
+            this.searchResults = searchResults;
+        }
+
+        public HTTPResponse respond(HTTPRequest req) {
+            HTTPResponse res = new HTTPResponse();
+            res.setHeader('Content-Type', 'application/json');
+            res.setBody('{"response": "mock response"}');
+            res.setStatusCode(200);
+            return res;
+        }
+    }
+}
